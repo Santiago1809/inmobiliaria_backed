@@ -1,3 +1,4 @@
+import type { Propiedad } from "../interface/propiedad";
 import { query } from "../lib/database";
 
 const propiedadService = {
@@ -7,40 +8,8 @@ const propiedadService = {
   getPropiedad: async (id: string) => {
     return await query("SELECT * FROM propiedades where id = ?", id);
   },
-  createPropiedad: async (propiedad: any) => {
-    return [
-      {
-        id: "20",
-        titulo: "Terreno con vistas a la montaña",
-        descripcion:
-          "Terreno con una excepcional vista panorámica de las montañas circundantes.",
-        precio: 150000,
-        habitaciones: 0,
-        banos: 0,
-        area: 1000,
-        direccion: {
-          calle: "Camino de la Montaña",
-          numero: "456",
-          ciudad: "Ciudad T",
-          estado: "Estado G",
-          codigoPostal: "98765",
-          pais: "País",
-        },
-        imagenes: [
-          "https://website-aa-assets.s3.amazonaws.com/MLSPropertiesPhotos/244579/lote-residencial-para-venta-en-medellin-poblado_l01.jpg",
-          "terreno12.jpg",
-        ],
-        amenidades: [
-          "Vista a la montaña",
-          "Zona tranquila",
-          "Listo para construir",
-        ],
-        tipo: "terreno",
-        estatus: "disponible",
-        publicadaEn: new Date("2023-02-15"),
-        actualizadaEn: new Date("2023-04-24"),
-      },
-    ]
+  createPropiedad: async (propiedad: Propiedad) => {
+    return await query("INSERT INTO propiedades(id, titulo, descripcion, precio, habitaciones, banos, area, calle, numero, ciudad, estado, codigoPostal, pais, imagenes, amenidades, tipo, estatus, publicadaEn, actualizadaEn, usuarioId) VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [propiedad.id, propiedad.titulo, propiedad.descripcion, propiedad.descripcion, propiedad.precio, propiedad.habitaciones, propiedad.banos, propiedad.area, propiedad.direccion.calle, propiedad.direccion.numero, propiedad.direccion.estado, propiedad.direccion.estado, propiedad.direccion.codigoPostal, propiedad.direccion.pais, propiedad.imagenes, propiedad.amenidades, propiedad.tipo, propiedad.estatus, propiedad.publicadaEn, propiedad.actualizadaEn, propiedad.usuarioId])
   }
 };
 
