@@ -2,15 +2,23 @@ import type { Propiedad } from "../interface/propiedad";
 import { query } from "../lib/database";
 
 const propiedadService = {
-  getAllPropiedades: async () => {
-    return await query("SELECT * FROM propiedades")
+  getAllPropiedades: async (): Promise<unknown> => {
+    return await query("SELECT * FROM properties");
   },
   getPropiedad: async (id: string) => {
-    return await query("SELECT * FROM propiedades where id = ?", id);
+    return await query("SELECT * FROM properties where id = $1", [id]);
   },
   createPropiedad: async (propiedad: Propiedad) => {
-    return await query("INSERT INTO propiedades(id, titulo, descripcion, precio, habitaciones, banos, area, calle, numero, ciudad, estado, codigoPostal, pais, imagenes, amenidades, tipo, estatus, publicadaEn, actualizadaEn, usuarioId) VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [propiedad.id, propiedad.titulo, propiedad.descripcion, propiedad.descripcion, propiedad.precio, propiedad.habitaciones, propiedad.banos, propiedad.area, propiedad.direccion.calle, propiedad.direccion.numero, propiedad.direccion.estado, propiedad.direccion.estado, propiedad.direccion.codigoPostal, propiedad.direccion.pais, propiedad.imagenes, propiedad.amenidades, propiedad.tipo, propiedad.estatus, propiedad.publicadaEn, propiedad.actualizadaEn, propiedad.usuarioId])
-  }
+    const { calle, numero, ciudad, estado, pais, codigoPostal } =
+      propiedad.direccion;
+    query(
+      "INSERT INTO addresses(calle, numero, ciudad, estado, pais, codpostal) VALUES ($1, $2, $3, $4, $5, $6)",
+      [calle, numero, ciudad, estado, pais, codigoPostal]
+    );
+    
+    const {usuarioId, titulo, descripcion, precio, direccion} = propiedad
+    query("INSERT INTO properties(userId, titulo, descripcion, precio, direccionId, habitaciones, banos, area, imagenes, amenidades, tipo, estado, createdAt, updatedAt) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14", [])
+  },
 };
 
 export default propiedadService;
