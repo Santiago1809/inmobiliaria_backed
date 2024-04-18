@@ -1,6 +1,5 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { config } from "dotenv";
-
 config();
 
 const connection = {
@@ -8,25 +7,25 @@ const connection = {
   user: process.env.USER,
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
-  port: 5432
+  port: 5432,
 };
 
-const client = new Client(connection);
+const pool = new Pool(connection);
 
-client.connect((err) => {
-  if (err) throw "Connection error";
-  console.log("Connected to database!");
-})
+export async function query(sql: string, params?: string[]) {
+  let client;
+  try {
+    client = await pool.connect();
+    await client.query("BEGIN");
 
-export function query(sql: string, params?: string[]) {
-  return new Promise((resolve, reject) => {
-    client.query(sql, params as string[], (err, result) => {
-      if (err) {
-        reject(err["message"]);
-      } else {
-        resolve(result['rows']);
-      }
-    });
+    const result = await client.query(sql, params as string[]);
 
-  });
+    await client.query("COMMIT");
+    return result.rows;
+  } catch (err) {
+    await client?.query("ROLLBACK");
+    throw err;
+  } finally {
+    client?.release();
+  }
 }

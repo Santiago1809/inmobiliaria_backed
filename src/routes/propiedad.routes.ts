@@ -5,4 +5,5 @@ const router: Router = express.Router();
 
 router.get('/', propiedadController.geAllPropiedades)
 router.get('/:id', propiedadController.getPropiedad)
+router.post('/', propiedadController.createProperty)
 export default router;

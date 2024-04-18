@@ -17,6 +17,14 @@ const propiedadController = {
     } catch (err) {
       res.status(500).json({err})
     }
+  },
+  createProperty : async (req: Request, res: Response) => {
+    const propiedad = await propiedadService.createPropiedad(req.body)
+    res.status(201).json(propiedad)
+    /* try {
+    } catch (err) {
+      res.status(500).json({err})
+    } */
   }
 }
 export {propiedadController}
