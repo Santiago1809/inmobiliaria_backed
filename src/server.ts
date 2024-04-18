@@ -7,7 +7,7 @@ import morgan from 'morgan'
 export const app = express()
 
 app.use(express.json())
-app.use(morgan('dev'))
+app.use(morgan('combined'))
 app.use(corsMiddleware)
-app.use('/api', propiedadRouter)
-app.use('/api', userRouter)
+app.use('/api/properties', propiedadRouter)
+app.use('/api/users', userRouter)

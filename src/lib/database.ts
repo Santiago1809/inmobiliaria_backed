@@ -27,6 +27,6 @@ export function query(sql: string, params?: string[]) {
         resolve(result['rows']);
       }
     });
-  ;
+
   });
 }
