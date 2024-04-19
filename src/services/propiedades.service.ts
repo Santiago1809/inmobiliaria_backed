@@ -2,7 +2,7 @@ import type { Propiedad } from "../interface/propiedad";
 import { query } from "../lib/database";
 
 const propiedadService = {
-  getAllPropiedades: async (): Promise<unknown> => {
+  getAllProperties: async (): Promise<unknown> => {
     const properties = await query("SELECT * FROM properties");
     const propertiesWithAddress = await Promise.all(
       properties.map(async (property) => {
@@ -18,7 +18,7 @@ const propiedadService = {
     );
     return propertiesWithAddress;
   },
-  getPropiedad: async (id: string) => {
+  getProperty: async (id: string) => {
     const property = await query("SELECT * FROM properties where id = $1", [
       id,
     ]);
@@ -32,7 +32,7 @@ const propiedadService = {
       direccion: direccion[0],
     } as Propiedad;
   },
-  createPropiedad: async (propiedad: Propiedad) => {
+  createProperty: async (propiedad: Propiedad) => {
     const { calle, numero, ciudad, estado, pais, codigoPostal } =
       propiedad.direccion;
     query(
@@ -80,6 +80,25 @@ const propiedadService = {
       ]
     );
   },
+  getPropertiesType: async (type: string) => {
+    const properties = await query(
+      "SELECT * FROM properties WHERE tipo = $1",
+      [type]
+    );
+    const propertiesWithAddress = await Promise.all(
+      properties.map(async (property) => {
+        const direccion = await query(
+          "SELECT calle, numero, ciudad, estado, pais, codpostal FROM addresses WHERE id = $1",
+          [property.direccionid]
+        );
+        return {
+          ...property,
+          direccion: direccion[0],
+        } as Propiedad;
+      })
+    );
+    return propertiesWithAddress;
+  }
 };
 
 export default propiedadService;
