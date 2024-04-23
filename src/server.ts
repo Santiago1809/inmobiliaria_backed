@@ -4,8 +4,10 @@ import propiedadRouter from '@routes/propiedad.routes'
 import userRouter from '@routes/user.routes'
 import formRouter from "@routes/form.routes"
 import morgan from 'morgan'
+import cors from 'cors'
 
 export const app = express()
+
 
 app.use(express.json())
 app.use(morgan('combined'))

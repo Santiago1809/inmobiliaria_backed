@@ -7,7 +7,11 @@ export const userController = {
     const response = await userService.registerUser(req.body);
     try {
       const accessToken = generateAccessToken(response);
-      response.access ? res.header('Authorization', accessToken).status(200).json( response ) : res.status(403).json(response);
+      if (response.access) {
+        res.status(200).json({...response, accessToken});
+      } else {
+        res.status(403).json(response);
+      }
     } catch (err) {
       res.status(500).json(err);
     }
@@ -15,10 +19,14 @@ export const userController = {
   loginUser: async (req: Request, res: Response) => {
     const response = await userService.loginUser(req.body);
     try {
-      const accessToken = generateAccessToken(response)
-      response.access ? res.header('Authorization', accessToken).status(200).json( response ) : res.status(403).json(response);
+      const accessToken = generateAccessToken(response);
+      if (response.access) {
+        res.status(200).json({...response, accessToken});
+      } else {
+        res.status(403).json(response);
+      }
     } catch (err) {
-      res.status(200).json( response );
+      res.status(200).json(response);
     }
   },
 };

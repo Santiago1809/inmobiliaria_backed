@@ -27,19 +27,17 @@ export const userService = {
       "SELECT contraseña, id, email, rol FROM users WHERE email = $1",
       [credential.email]
     );
-    return sql.length > 0 && decrypt(sql[0]?.contraseña, credential.contraseña)
+    return sql.length > 0 && decrypt(sql[0]?.contraseña, credential.password)
       ? {
           access:
-            sql.length > 0 &&
-            decrypt(sql[0]?.contraseña, credential.contraseña),
+            sql.length > 0 && decrypt(sql[0]?.contraseña, credential.password),
           id: sql[0]?.id,
           email: sql[0].email,
           rol: sql[0].rol,
         }
       : {
           access:
-            sql.length > 0 &&
-            decrypt(sql[0]?.contraseña, credential.contraseña),
+            sql.length > 0 && decrypt(sql[0]?.contraseña, credential.password),
         };
   },
 };
