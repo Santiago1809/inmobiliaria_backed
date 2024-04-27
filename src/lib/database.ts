@@ -4,13 +4,17 @@ config();
 
 const connection = {
   host: process.env.HOST,
-  user: process.env.USER,
+  user: process.env.DB_USER,
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
   port: 5432,
 };
 
 const pool = new Pool(connection);
+
+pool.on("connect", async () => {
+  console.log(`Successfully connected to database`);
+});
 
 export async function query(sql: string, params?: string[]) {
   let client;
