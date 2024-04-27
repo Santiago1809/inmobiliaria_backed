@@ -1,10 +1,10 @@
-import {genSaltSync, hashSync, compareSync} from 'bcrypt'
+import {genSalt, hash, compare} from 'bcrypt'
 
-const salt = genSaltSync(15)
+const salt = await genSalt(15)
 
 export const encrypt = (password: string) => {
-  return hashSync(password, salt)
+  return hash(password, salt)
 }
 export const decrypt = (stored:string, incoming:string) => {
-  return compareSync(incoming, stored)
+  return compare(incoming, stored)
 }

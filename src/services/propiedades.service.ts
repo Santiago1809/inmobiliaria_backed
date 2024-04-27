@@ -7,7 +7,7 @@ const propiedadService = {
     const propertiesWithAddress = await Promise.all(
       properties.map(async (property) => {
         const direccion = await query(
-          "SELECT calle, numero, ciudad, estado, pais, codpostal FROM addresses WHERE id = $1",
+          "SELECT calle, numero, ciudad, departamento, pais, codpostal FROM addresses WHERE id = $1",
           [property.direccionid]
         );
         return {
@@ -23,7 +23,7 @@ const propiedadService = {
       id,
     ]);
     const direccion = await query(
-      "SELECT calle, numero, ciudad, estado, pais, codpostal FROM addresses WHERE id = $1",
+      "SELECT calle, numero, ciudad, departamento, pais, codpostal FROM addresses WHERE id = $1",
       [property[0].direccionid]
     );
 
@@ -33,15 +33,15 @@ const propiedadService = {
     } as Propiedad;
   },
   createProperty: async (propiedad: Propiedad) => {
-    const { calle, numero, ciudad, estado, pais, codigoPostal } =
+    const { calle, numero, ciudad, departamento, pais, codigoPostal } =
       propiedad.direccion;
     query(
-      "INSERT INTO addresses(calle, numero, ciudad, estado, pais, codpostal) VALUES ($1, $2, $3, $4, $5, $6)",
-      [calle, numero, ciudad, estado, pais, codigoPostal]
+      "INSERT INTO addresses(calle, numero, ciudad, departamento, pais, codpostal) VALUES ($1, $2, $3, $4, $5, $6)",
+      [calle, numero, ciudad, departamento, pais, codigoPostal]
     );
     const getDireccionId = await query(
-      "SELECT id FROM addresses WHERE calle = $1 AND numero = $2 AND estado = $3 AND ciudad = $4",
-      [calle, numero, estado, ciudad]
+      "SELECT id FROM addresses WHERE calle = $1 AND numero = $2 AND departamento = $3 AND ciudad = $4",
+      [calle, numero, departamento, ciudad]
     );
     const direccionId = getDireccionId[0].id;
     const {
@@ -55,13 +55,14 @@ const propiedadService = {
       imagenes,
       amenidades,
       tipo,
-      departamento,
+      tipo_venta,
+      estado,
       createdAt,
       updatedAt,
     } = propiedad;
 
     return await query(
-      "INSERT INTO properties(userId, titulo, descripcion, precio, direccionId, habitaciones, banos, area, imagenes, amenidades, tipo, estado, createdAt, updatedAt) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)",
+      "INSERT INTO properties(userId, titulo, descripcion, precio, direccionId, habitaciones, banos, area, imagenes, amenidades, tipo, tipo_venta ,estado, createdAt, updatedAt) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)",
       [
         usuarioId,
         titulo,
@@ -74,7 +75,8 @@ const propiedadService = {
         imagenes,
         amenidades,
         tipo,
-        departamento,
+        tipo_venta,
+        estado,
         createdAt,
         updatedAt,
       ]
@@ -88,7 +90,7 @@ const propiedadService = {
     const propertiesWithAddress = await Promise.all(
       properties.map(async (property) => {
         const direccion = await query(
-          "SELECT calle, numero, ciudad, estado, pais, codpostal FROM addresses WHERE id = $1",
+          "SELECT calle, numero, ciudad, departamento, pais, codpostal FROM addresses WHERE id = $1",
           [property.direccionid]
         );
         return {

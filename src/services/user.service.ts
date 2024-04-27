@@ -5,8 +5,10 @@ import { decrypt, encrypt } from "../lib/encrypter";
 
 export const userService = {
   registerUser: async (user: User) => {
-    const { nombre, apellido, email, contraseña } = user;
-    const newContraseña = encrypt(contraseña);
+    const { nombre, apellido, email, password: contraseña } = user;
+    console.log(user);
+    const newContraseña = await encrypt(contraseña);
+    
     try {
       await query(
         "INSERT INTO users(id, nombre, apellido, email, contraseña) VALUES ($1, $2, $3, $4, $5)",
@@ -24,10 +26,10 @@ export const userService = {
   },
   loginUser: async (credential: Login) => {
     const sql = await query(
-      "SELECT contraseña, id, email, rol FROM users WHERE email = $1",
+      "SELECT contraseña, id, email, rol FROM users WHERE email = $1 LIMIT 1",
       [credential.email]
     );
-    return sql.length > 0 && decrypt(sql[0]?.contraseña, credential.password)
+    return sql.length > 0 && await decrypt(sql[0]?.contraseña, credential.password)
       ? {
           access:
             sql.length > 0 && decrypt(sql[0]?.contraseña, credential.password),

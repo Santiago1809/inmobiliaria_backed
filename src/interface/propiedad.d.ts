@@ -10,14 +10,15 @@ export interface Propiedad {
     calle: string;
     numero: string;
     ciudad: string;
-    estado: string;
+    departamento: string;
     codigoPostal: string;
     pais: string;
   }; // Dirección detallada de la propiedad
   imagenes: string[]; // URLs de las imágenes de la propiedad
   amenidades: string[]; // Lista de amenidades de la propiedad
   tipo: TipoPropiedad; // Tipo de propiedad
-  departamento: "disponible" | "vendido" | "alquilado"; // Estatus actual de la propiedad
+  tipo_venta: "venta" | "alquiler"; // tipo de venta
+  estado: "disponible" | "vendido" | "alquilado"; // Estatus actual de la propiedad
   createdAt: string; // Fecha en que se publicó la propiedad
   updatedAt: Date; // Fecha de la última actualización de la propiedad
   usuarioId: string; // Id del usuario dueño de la propiedad

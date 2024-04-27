@@ -2,7 +2,7 @@ export interface User {
   nombre: string;
   apellido: string;
   email: string;
-  contraseña: string;
+  password: string;
 }
 export interface Login {
   email: string;
